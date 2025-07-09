@@ -1,1 +1,9 @@
-/services
+﻿/.idea/inspectionProfiles/profiles_settings.xml
+/.idea/.gitignore
+/.idea/encodings.xml
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/v.0.2.iml
+/.idea/vcs.xml
+/services/Key.json
+/services/config.py
