@@ -1,6 +1,6 @@
 from disnake.ext import commands, tasks
 from services.config import DISCORD_TOKEN, GUILD_ID, bot, CHANNELS_WITHOUT_EXP, NEW_USER_CHANNEL_ID, ADMIN_ID, NEW_USER_ROLE_ID
-from systems.perms import Permissions
+from systems.perms import roles_permissions, Permissions
 from models.User import User
 from models.ArchivedUser import ArchivedUser
 import disnake
@@ -10,7 +10,6 @@ from asyncio import sleep
 from systems.user_manager import check_and_update_users, archive_user, handle_role_update, restore_user, update_user_data
 
 voice_channel_times = {}
-
 
 async def reset_levels_and_experience():
     """Сбрасывает уровни и опыт только для пользователей, которые есть в базе данных или архиве."""
@@ -76,27 +75,27 @@ async def on_ready():
         reset_levels_task.start()
 
     # Проверяем, если бот был запущен позже 1 числа
-    # now = datetime.now()
-    # if now.day > 1:
-    #     admin = bot.get_user(ADMIN_ID)
-    #     if admin:
-    #         message = await admin.send(
-    #             "Бот был запущен позже 1 числа. Выполнить сброс уровней и опыта?",
-    #         )
-    #         await message.add_reaction("✅")  # Реакция для выполнения сброса
-    #         await message.add_reaction("❌")  # Реакция для отмены
+    now = datetime.now()
+    if now.day > 1:
+        admin = bot.get_user(ADMIN_ID)
+        if admin:
+            message = await admin.send(
+                "Бот был запущен позже 1 числа. Выполнить сброс уровней и опыта?",
+            )
+            await message.add_reaction("✅")  # Реакция для выполнения сброса
+            await message.add_reaction("❌")  # Реакция для отмены
 
-    #         def check(reaction, user):
-    #             return user.id == ADMIN_ID and str(reaction.emoji) in ["✅", "❌"]
+            def check(reaction, user):
+                return user.id == ADMIN_ID and str(reaction.emoji) in ["✅", "❌"]
 
-    #         try:
-    #             reaction, _ = await bot.wait_for("reaction_add", timeout=86400, check=check)
-    #             if str(reaction.emoji) == "✅":
-    #                 await reset_levels_and_experience()  # Вызываем функцию сброса
-    #             elif str(reaction.emoji) == "❌":
-    #                 print("[INFO] Сброс уровней отменен.")
-    #         except asyncio.TimeoutError:
-    #             print("[INFO] Время ожидания реакции истекло.")
+            try:
+                reaction, _ = await bot.wait_for("reaction_add", timeout=86400, check=check)
+                if str(reaction.emoji) == "✅":
+                    await reset_levels_and_experience()  # Вызываем функцию сброса
+                elif str(reaction.emoji) == "❌":
+                    print("[INFO] Сброс уровней отменен.")
+            except asyncio.TimeoutError:
+                print("[INFO] Время ожидания реакции истекло.")
 
 @bot.event
 async def on_member_update(before, after):

@@ -29,7 +29,7 @@ class UserCommands(BaseCog):
         embed.add_field(name="Имя на сервере", value=user.name, inline=False)
         embed.add_field(name="Количество спец баллов", value=user.special_points, inline=False)
         embed.add_field(name="Уровень", value=user.level, inline=False)
-        embed.add_field(name="Опыт", value=f"{int(user.experience)}/1000", inline=False)
+        embed.add_field(name="Опыт", value=f"{int(user.experience)}/1200", inline=False)
 
         join_date = user.join_date.strftime('%d.%m.%Y') if user.join_date else 'Нет данных'
         embed.add_field(name="Дата вступления", value=join_date, inline=False)

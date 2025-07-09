@@ -14,9 +14,9 @@ class BaseCog(commands.Cog):
         if commands:
             await self.bot.bulk_overwrite_guild_commands(guild_id, commands)
             command_names = [cmd.name for cmd in commands]
-            print(f"[DEBUG] Команды синхронизированы для сервера {guild_id}: {', '.join(command_names)}")
+            print(f"Команды синхронизированы для сервера {guild_id}: {', '.join(command_names)}")
         else:
-            print(f"[DEBUG] Нет команд для синхронизации для сервера {guild_id}")
+            print(f"Нет команд для синхронизации для сервера {guild_id}")
 
 def setup(bot):
     bot.add_cog(BaseCog(bot))

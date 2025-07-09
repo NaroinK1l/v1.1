@@ -7,3 +7,5 @@
 /.idea/vcs.xml
 /services/Key.json
 /services/config.py
+/.venv/
+/.vscode/

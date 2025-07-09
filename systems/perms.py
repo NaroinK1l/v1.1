@@ -3,8 +3,7 @@ import asyncio
 
 roles_permissions = {
     "non_server_members": {
-        "role_ids": [758380980217315328, 957298263684435978],  # Пример ID роли
-        "user_ids": [],  # Список ID пользователей
+        "role_ids": [957298263684435978],  # Пример ID роли
         "permissions": {
             "user": True,
         }
@@ -14,7 +13,6 @@ roles_permissions = {
                      736595830362079273, 580785920341442571, 1295024572751417417,
                      580785634986295297, 580752849538121761, 1295024473120182292,
                      736590461686382654],  # Пример ID роли
-        "user_ids": [],  # Список ID пользователей
         "permissions": {
             "RankUp": True,
             "count_exp": True,
@@ -26,7 +24,6 @@ roles_permissions = {
                     1284655649598214194, 1284654927494254613, 1283675232573460502, 
                     1282650279585779733, 993176593222606878, 993176600428417025,
                     993176581801529345, 993176532338094121,993175140475080816],  # Пример ID роли
-        "user_ids": [],  # Список ID пользователей
         "permissions": {
             "edit_date": True
         },
@@ -34,7 +31,6 @@ roles_permissions = {
     },
     "administrators": {
         "role_ids": [580788199241023499,580787880398553103],  # Пример ID роли
-        "user_ids": [],  # Пример ID пользователя
         "permissions": {
             "set": True,
             "edit_user": True,
@@ -42,8 +38,7 @@ roles_permissions = {
         "inherits": "advanced_members",
     },
     "leaders": {
-        "role_ids": [1026142753169604688, 580460131859562546, 580788132211982337],  # Пример ID роли
-        "user_ids": [242578640196337665],  # Список ID пользователей
+        "role_ids": [1026142753169604688, 580460131859562546, 580788132211982337, 242578640196337665],  # Пример ID роли
         "permissions": {},
     }
 }
@@ -67,28 +62,19 @@ class Permissions:
         return {key: value for key, value in combined_permissions.items() if value}
     
     @classmethod
-    def check_permission(cls, user_role_ids, command, user_id=None):
+    def check_permission(cls, user_role_ids, command):
         # Проверяем, если пользователь имеет роль "leaders"
         leaders_role_ids = roles_permissions["leaders"]["role_ids"]
         if any(role_id in user_role_ids for role_id in leaders_role_ids):
             print(f"User has leader role. Access granted to all commands.")
             return True  # Лидеры имеют доступ ко всем командам
 
-        # Проверяем ID пользователя (приоритетная проверка)
-        if user_id:
-            for role_name, role_data in roles_permissions.items():
-                if user_id in role_data.get("user_ids", []):
-                    permissions = cls.get_role_persmisisons(role_name)
-                    if command in permissions:
-                        print(f"User ID {user_id} found in user_ids for role '{role_name}'. Access granted.")
-                        return True
-
-        # Обычная проверка разрешений по ролям
+        # Обычная проверка разрешений
         for role_name, role_data in roles_permissions.items():
             if any(role_id in user_role_ids for role_id in role_data.get("role_ids", [])):
+                print(cls.get_role_persmisisons(role_name))
                 if command in cls.get_role_persmisisons(role_name):
                     return True
-
         return False
 
     @classmethod
